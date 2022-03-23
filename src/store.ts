@@ -77,7 +77,7 @@ export const getManifest = async (
   let uri = `${
     import.meta.env.VITE_BASE_URI
   }manifests/${selected_rover}?api_key=${import.meta.env.VITE_API_KEY}`;
-  alert(uri);
+
   const res = await fetch(uri);
   if (res.status == 200) {
     let data = await res.json();
