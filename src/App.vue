@@ -106,26 +106,23 @@ function resetForm() {
 <template>
   <div>
     <transition name="slide" appear>
-      <div class="flex flex-row items-center justify-start m-2 pb-2 border-b">
+      <div class="flex flex-row items-center justify-start my-2 pb-2 border-b">
         <img class="logo" alt="Vue logo" src="./assets/NasaLogo.png" />
         <h3 class="text-lg">Mars {{ selected_rover }} Rover</h3>
       </div>
     </transition>
     <div
-      v-if="display_rover_select"
-      class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
+      class="min-h-full flex flex-row items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
     >
       <RoverFormVue
+        v-if="display_rover_select"
         :getManifestItems="getManifestItems"
         :resetForm="resetForm"
         :error_message="error_message"
       />
-    </div>
-    <div
-      v-else
-      class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
-    >
+
       <RoverCameraForm
+        v-else
         :getRoverImages="getRoverImages"
         :resetForm="resetForm"
         :cameras="cameras"
