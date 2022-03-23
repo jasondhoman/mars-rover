@@ -1,5 +1,4 @@
 <script setup lang="ts">
-//comment
 import { ref } from 'vue';
 
 import RoverFormVue from './components/RoverForm.vue';
