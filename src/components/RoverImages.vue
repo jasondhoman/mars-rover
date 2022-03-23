@@ -34,7 +34,7 @@ defineProps<Props>();
   <transition name="fade">
     <div class="grid grid-cols-3 gap-4 m-5">
       <img
-        class="rounded-md border-1 border-gray-900"
+        class="rounded-md border-1 border-gray-900 w-full h-full"
         v-for="photo in photos"
         :key="photo.id"
         :src="photo.img_src"

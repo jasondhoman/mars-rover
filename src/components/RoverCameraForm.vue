@@ -19,7 +19,7 @@ const selected_camera = ref('');
     <div>
       <h2
         v-if="camera_name.length == 0"
-        class="text-center text-2xl font-extrabold"
+        class="text-center text-xl font-extrabold"
       >
         Select Camera
       </h2>
@@ -45,7 +45,6 @@ const selected_camera = ref('');
       <div class="w-full flex flex-row items-center justify-center">
         <span>Total Photos: {{ total_photos }}</span>
       </div>
-      <span>{{ error_message }}</span>
       <div class="">
         <button
           class="mx-1 border px-3 py-2 rounded-md border-gray-400 hover:text-white"
@@ -59,6 +58,14 @@ const selected_camera = ref('');
         >
           Submit
         </button>
+      </div>
+
+      <div class="py-2">
+        <transition name="slidex">
+          <span v-if="error_message" class="text-red-500">{{
+            error_message
+          }}</span>
+        </transition>
       </div>
     </form>
   </div>

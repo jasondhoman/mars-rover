@@ -15,26 +15,26 @@ export interface Manifest {
   photos: Array<ManifestPhotos>;
 }
 
-interface ManifestPhotos {
+export interface ManifestPhotos {
   sol: number;
   earth_date: string;
   total_photos: number;
   cameras: Array<string>;
 }
 
-interface RoverSelect {
+export interface RoverSelect {
   id: number;
   name: string;
 }
 
-interface Camera {
+export interface Camera {
   id: number;
   name: string;
   rover_id: string;
   full_name: string;
 }
 
-interface Rover {
+export interface Rover {
   id: number;
   name: string;
   landing_date: Date;
@@ -42,7 +42,7 @@ interface Rover {
   status: string;
 }
 
-interface Photo {
+export interface Photo {
   id: number;
   sol: number;
   camera: Camera;

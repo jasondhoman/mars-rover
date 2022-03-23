@@ -1,59 +1,25 @@
 <script setup lang="ts">
-import RoverFormVue from './components/RoverForm.vue';
 import { ref } from 'vue';
+
+import RoverFormVue from './components/RoverForm.vue';
 import RoverImages from './components/RoverImages.vue';
 import RoverCameraForm from './components/RoverCameraForm.vue';
-import { getPhotos, getManifest, Manifest } from './store';
+import {
+  getPhotos,
+  getManifest,
+  Manifest,
+  Photo,
+  ManifestPhotos,
+} from './store';
 
-interface Manifest {
-  name: string;
-  landing_date: Date;
-  launch_date: Date;
-  status: string;
-  max_sol: number;
-  max_date: Date;
-  total_photos: number;
-  photos: Array<ManifestPhotos>;
-}
-
-interface ManifestPhotos {
-  sol: number;
-  earth_date: string;
-  total_photos: number;
-  cameras: Array<string>;
-}
-
-interface Camera {
-  id: number;
-  name: string;
-  rover_id: string;
-  full_name: string;
-}
-
-interface Rover {
-  id: number;
-  name: string;
-  landing_date: Date;
-  launch_date: Date;
-  status: string;
-}
-
-interface Photo {
-  id: number;
-  sol: number;
-  camera: Camera;
-  img_src: string;
-  earth_date: Date;
-  rover: Rover;
-}
-
-const date_selected = ref<string>('2015-6-3');
-const error_message = ref<string>('');
+const date_selected = ref('2015-6-3');
+const error_message = ref('');
 const photos = ref<Array<Photo>>();
 const display_photos = ref(false);
+const display_rover_select = ref(true);
 const manifest = ref<Manifest>();
 const cameras = ref<Array<string>>();
-const selected_camera = ref<string>('');
+const selected_camera = ref('');
 const manifest_day_info = ref<ManifestPhotos>();
 const camera_name = ref('');
 const selected_rover = ref('');
@@ -69,6 +35,11 @@ async function getManifestItems(rover: string, earth_date: string) {
   let end_date = new Date(earth_date);
   if (end_date.toString() == 'Invalid Date') {
     error_message.value = 'Date Entered is Invalid';
+    return;
+  }
+
+  if (!rover) {
+    error_message.value = 'Please Select a Rover';
     return;
   }
 
@@ -94,6 +65,7 @@ async function getManifestItems(rover: string, earth_date: string) {
         cameras.value = photo.cameras;
         manifest_day_info.value = photo;
         total_photos.value = manifest_day_info.value.total_photos;
+        display_rover_select.value = false;
         break;
       }
     }
@@ -104,6 +76,11 @@ async function getManifestItems(rover: string, earth_date: string) {
 }
 
 async function getRoverImages(selected_camera: string) {
+  error_message.value = '';
+  if (!selected_camera) {
+    error_message.value = 'Please Select a Camera';
+    return;
+  }
   let data = await getPhotos(
     selected_rover.value,
     selected_camera,
@@ -120,6 +97,9 @@ function resetForm() {
   selected_rover.value = '';
   cameras.value = [];
   camera_name.value = '';
+  selected_rover.value = '';
+  display_rover_select.value = true;
+  error_message.value = '';
 }
 </script>
 
@@ -128,34 +108,33 @@ function resetForm() {
     <transition name="slide" appear>
       <div class="flex flex-row items-center justify-start m-2 pb-2 border-b">
         <img class="logo" alt="Vue logo" src="./assets/NasaLogo.png" />
-        <h3 class="text-lg">Mars Rover</h3>
+        <h3 class="text-lg">Mars {{ selected_rover }} Rover</h3>
       </div>
     </transition>
-    <Transition-group name="slidex" appear>
-      <div
-        v-if="cameras?.length == 0"
-        class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
-      >
-        <RoverFormVue
-          :getManifestItems="getManifestItems"
-          :error_message="error_message"
-        />
-      </div>
-      <div
-        v-else
-        class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
-      >
-        <RoverCameraForm
-          :getRoverImages="getRoverImages"
-          :resetForm="resetForm"
-          :cameras="cameras"
-          :error_message="error_message"
-          :camera_name="camera_name"
-          :total_photos="total_photos"
-        />
-      </div>
-    </Transition-group>
-    <div v-if="display_photos">
+    <div
+      v-if="display_rover_select"
+      class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
+    >
+      <RoverFormVue
+        :getManifestItems="getManifestItems"
+        :resetForm="resetForm"
+        :error_message="error_message"
+      />
+    </div>
+    <div
+      v-else
+      class="min-h-full grid grid-flow-row grid-cols-1 items-center justify-center p-4 sm:px-6 lg:px-8 border max-w-md m-auto rounded-md"
+    >
+      <RoverCameraForm
+        :getRoverImages="getRoverImages"
+        :resetForm="resetForm"
+        :cameras="cameras"
+        :error_message="error_message"
+        :camera_name="camera_name"
+        :total_photos="total_photos"
+      />
+    </div>
+    <div v-if="display_photos" class="m-auto max-w-7xl mt-5">
       <RoverImages v-if="photos?.length" :photos="photos" />
     </div>
   </div>
@@ -171,6 +150,10 @@ function resetForm() {
 }
 .logo {
   width: 4rem;
+}
+
+button:hover {
+  background-color: #0b3d91;
 }
 
 .fade-enter-active,

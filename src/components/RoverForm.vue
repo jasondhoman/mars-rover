@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 interface Props {
   getManifestItems: (selected_rover: string, earth_date: string) => void;
+  resetForm: () => void;
   error_message: string;
 }
 
@@ -29,7 +30,7 @@ const earth_date = ref<string>('');
 <template>
   <div class="w-full bg-white rounded-md px-7 py-4">
     <div>
-      <h2 class="text-center text-3xl font-extrabold">Select Rover and Date</h2>
+      <h2 class="text-center text-xl font-extrabold">Select Rover and Date</h2>
     </div>
 
     <form
@@ -44,11 +45,7 @@ const earth_date = ref<string>('');
         <option v-show="selected_rover == ''" value>
           Please Select a Rover
         </option>
-        <option
-          v-for="rover in rovers"
-          :key="rover.id"
-          :value="rover.name.toLowerCase()"
-        >
+        <option v-for="rover in rovers" :key="rover.id" :value="rover.name">
           {{ rover.name }}
         </option>
       </select>
@@ -62,36 +59,30 @@ const earth_date = ref<string>('');
           required
         />
       </div>
-      <div>
-        <span>{{ error_message }}</span>
+      <div class="pt-2">
+        <button
+          class="mx-1 border px-3 py-2 rounded-md border-gray-400 hover:text-white"
+          type="reset"
+          @click.prevent="resetForm"
+        >
+          Reset
+        </button>
+        <button
+          class="mx-1 border px-3 py-2 rounded-md border-gray-400 hover:text-white"
+          type="submit"
+        >
+          Submit
+        </button>
       </div>
-      <button
-        class="border px-3 py-2 rounded-md border-gray-400 hover:text-white"
-        type="submit"
-      >
-        Submit
-      </button>
+      <div class="py-2">
+        <transition name="slidex">
+          <span v-if="error_message" class="text-red-500">{{
+            error_message
+          }}</span>
+        </transition>
+      </div>
     </form>
   </div>
 </template>
 
-<style>
-button:hover {
-  background-color: pink;
-}
-
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.75s ease-out;
-}
-
-.slide-up-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-</style>
+<style></style>
