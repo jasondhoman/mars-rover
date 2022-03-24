@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 interface Props {
   getRoverImages: (camera: string) => void;
   resetForm: () => void;

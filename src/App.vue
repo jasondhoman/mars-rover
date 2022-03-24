@@ -18,6 +18,7 @@ const date_selected = ref('');
 const display_photos = ref(false);
 const display_rover_select = ref(true);
 const error_message = ref('');
+const loading = ref(false);
 const manifest_day_info = ref<ManifestPhotos>();
 const manifest = ref<Manifest>();
 const photos = ref<Array<Photo>>();
@@ -43,6 +44,7 @@ async function getManifestItems(rover: string, earth_date: string) {
     return;
   }
 
+  loading.value = true;
   date_selected.value = end_date.toISOString().split('T')[0];
   let data = await getManifest(rover);
 
@@ -73,6 +75,8 @@ async function getManifestItems(rover: string, earth_date: string) {
   if (!found_date) {
     error_message.value = 'No Photos Located for Date Selected';
   }
+
+  loading.value = false;
 }
 
 async function getRoverImages(selected_camera: string) {
@@ -81,6 +85,7 @@ async function getRoverImages(selected_camera: string) {
     error_message.value = 'Please Select a Camera';
     return;
   }
+  loading.value = true;
   let data = await getPhotos(
     selected_rover.value,
     selected_camera,
@@ -90,6 +95,7 @@ async function getRoverImages(selected_camera: string) {
     photos.value = data;
     camera_name.value = photos.value[0].camera.full_name;
   }
+  loading.value = false;
 }
 
 function resetForm() {
@@ -130,6 +136,13 @@ function resetForm() {
         :camera_name="camera_name"
         :total_photos="total_photos"
       />
+    </div>
+    <div
+      class="flex flex-row items-baseline justify-center mt-4"
+      v-if="loading"
+    >
+      <img class="max-h-11" src="src/assets/loading.gif" alt="" />
+      &nbsp;&nbsp;fetching data ...
     </div>
     <div v-if="display_photos" class="m-auto max-w-7xl mt-5">
       <RoverImages v-if="photos?.length" :photos="photos" v-cloak />
