@@ -42,9 +42,7 @@ const earth_date = ref<string>('');
         id="rover"
         v-model="selected_rover"
       >
-        <option v-show="selected_rover == ''" value>
-          Please Select a Rover
-        </option>
+        <option value="">Please Select a Rover</option>
         <option v-for="rover in rovers" :key="rover.id" :value="rover.name">
           {{ rover.name }}
         </option>
