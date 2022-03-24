@@ -141,7 +141,7 @@ function resetForm() {
       class="flex flex-row items-baseline justify-center mt-4"
       v-if="loading"
     >
-      <img class="max-h-11" src="src/assets/loading.gif" alt="" />
+      <img class="max-h-11" src="./assets/loading.gif" alt="" />
       &nbsp;&nbsp;fetching data ...
     </div>
     <div v-if="display_photos" class="m-auto max-w-7xl mt-5">
