@@ -12,16 +12,16 @@ import {
   ManifestPhotos,
 } from './store';
 
-const date_selected = ref('2015-6-3');
-const error_message = ref('');
-const photos = ref<Array<Photo>>();
+const cameras = ref<Array<string>>();
+const camera_name = ref('');
+const date_selected = ref('');
 const display_photos = ref(false);
 const display_rover_select = ref(true);
-const manifest = ref<Manifest>();
-const cameras = ref<Array<string>>();
-const selected_camera = ref('');
+const error_message = ref('');
 const manifest_day_info = ref<ManifestPhotos>();
-const camera_name = ref('');
+const manifest = ref<Manifest>();
+const photos = ref<Array<Photo>>();
+const selected_camera = ref('');
 const selected_rover = ref('');
 const total_photos = ref(0);
 
@@ -132,12 +132,15 @@ function resetForm() {
       />
     </div>
     <div v-if="display_photos" class="m-auto max-w-7xl mt-5">
-      <RoverImages v-if="photos?.length" :photos="photos" />
+      <RoverImages v-if="photos?.length" :photos="photos" v-cloak />
     </div>
   </div>
 </template>
 
 <style>
+[v-cloak] {
+  display: none;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -145,6 +148,7 @@ function resetForm() {
   text-align: center;
   color: #2c3e50;
 }
+
 .logo {
   width: 4rem;
 }
@@ -174,36 +178,6 @@ button:hover {
 }
 
 .slide-leave-to {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-.slidex-enter-active,
-.slidex-leave-active {
-  transition: opacity 0.75s, transform 0.75s ease;
-}
-
-.slidex-enter-from {
-  opacity: 0;
-  transform: translateX(-30%);
-}
-
-.slidex-leave-to {
-  opacity: 0;
-  transform: translateX(0%);
-}
-
-.slideup-enter-active,
-.slideup-leave-active {
-  transition: opacity 0.75s, transform 0.75s ease;
-}
-
-.slideup-enter-from {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-.slideup-leave-to {
   opacity: 0;
   transform: translateY(30%);
 }
